@@ -8,7 +8,9 @@ if [ ! -f "$DOKKU_ROOT/$APP/ENV" ]; then
 fi
 
 # read app environment variable with in-container path to custom configuration file
+set +eo pipefail;
 $(cat $DOKKU_ROOT/$APP/ENV | grep 'NGINX_VHOSTS_CUSTOM_CONFIGURATION=')
+set -eo pipefail;
 
 # this plugin will only work if NGINX_VHOSTS_CUSTOM_CONFIGURATION environment variable is set
 if [ "$NGINX_VHOSTS_CUSTOM_CONFIGURATION" == "" ]; then
