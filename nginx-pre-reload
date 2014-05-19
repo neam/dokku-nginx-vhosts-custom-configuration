@@ -2,8 +2,18 @@
 set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
 APP="$1";
 
+# do not even attempt to read ENV if it does not exist
+if [ ! -f "$DOKKU_ROOT/$APP/ENV" ]; then
+    exit 0;
+fi
+
 # read app environment variable with in-container path to custom configuration file
 $(cat $DOKKU_ROOT/$APP/ENV | grep 'NGINX_VHOSTS_CUSTOM_CONFIGURATION=')
+
+# this plugin will only work if NGINX_VHOSTS_CUSTOM_CONFIGURATION environment variable is set
+if [ "$NGINX_VHOSTS_CUSTOM_CONFIGURATION" == "" ]; then
+    exit 0;
+fi
 
 # make sure that app-specific nginx.conf include directory exists
 if [ ! -d "$DOKKU_ROOT/$APP/nginx.conf.d/" ]; then
