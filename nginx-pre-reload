@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+APP="$1";
+
+# read app environment variable with in-container path to custom configuration file
+$(cat $DOKKU_ROOT/$APP/ENV | grep 'NGINX_VHOSTS_CUSTOM_CONFIGURATION=')
+
+# make sure that app-specific nginx.conf include directory exists
+if [ ! -d "$DOKKU_ROOT/$APP/nginx.conf.d/" ]; then
+    mkdir "$DOKKU_ROOT/$APP/nginx.conf.d/"
+fi
+
+# import custom configuration to dokku host
+docker run -i -a stdout dokku/$APP cat /app/"$NGINX_VHOSTS_CUSTOM_CONFIGURATION" > $DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf
