@@ -14,6 +14,10 @@ set -eo pipefail;
 
 # this plugin will only work if NGINX_VHOSTS_CUSTOM_CONFIGURATION environment variable is set
 if [ "$NGINX_VHOSTS_CUSTOM_CONFIGURATION" == "" ]; then
+    ## Remove custom configration if exist
+    if [ -f "$DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf" ]; then
+        rm -f $DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf
+    fi
     exit 0;
 fi
 
