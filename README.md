@@ -2,6 +2,10 @@
 
 [Dokku](https://github.com/progrium/dokku) plugin to add custom configuration directives to the nginx vhost configuration on the dokku host.
 
+## Background
+
+Relevant use cases for when the nginx vhost configuration needs to be customized can be to set proxy timeouts in order to allow long running requests, setting specific SSL directives, enabled uploading of large files and the like.
+
 ## Installation
 
 ```bash
