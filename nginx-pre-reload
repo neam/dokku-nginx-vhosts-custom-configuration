@@ -23,4 +23,4 @@ if [ ! -d "$DOKKU_ROOT/$APP/nginx.conf.d/" ]; then
 fi
 
 # import custom configuration to dokku host
-docker run -i -e PORT=$(cat $DOKKU_ROOT/$APP/PORT) -a stdout dokku/$APP erb /app/"$NGINX_VHOSTS_CUSTOM_CONFIGURATION" > $DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf
+docker run -i -e PORT=$(cat $DOKKU_ROOT/$APP/PORT) -e APP=$APP -a stdout dokku/$APP erb /app/"$NGINX_VHOSTS_CUSTOM_CONFIGURATION" > $DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf
