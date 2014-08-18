@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+set -eo pipefail; [[ $DOKKU_TRACE ]] && set -x
+
+# Check if name is specified
+if [[ $1 == nvcc ]] || [[ $1 == nvcc:* ]]; then
+
+  if [[ -z $2 ]]; then
+    echo "You must specify an app name"
+    exit 1
+  else
+    APP="$2"
+
+    # Check if app exists with the same name
+    if [ ! -d "$DOKKU_ROOT/$APP" ]; then
+      echo "App $APP does not exist"
+      exit 1
+    fi
+
+  fi
+
+  case "$1" in
+
+    nvcc:nginx.conf)
+
+        cat "$DOKKU_ROOT/$APP/nginx.conf"
+
+      ;;
+
+    nvcc:nginx.conf.d)
+
+        if [ -d "$DOKKU_ROOT/$APP/nginx.conf.d/" ] && [ "$(ls -A $DOKKU_ROOT/$APP/nginx.conf.d/)" ]; then
+            ls -l "$DOKKU_ROOT/$APP/nginx.conf.d/"
+        else
+            echo "$DOKKU_ROOT/$APP/nginx.conf.d/ does not exist or is empty"
+            exit 1
+        fi
+
+      ;;
+
+    nvcc:nginx-vhosts-custom-configuration.conf)
+
+        if [ -f "$DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf" ]; then
+            cat "$DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf"
+        else
+            echo "$DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf does not exist"
+            exit 1
+        fi
+
+      ;;
+
+    nvcc:port)
+
+        cat "$DOKKU_ROOT/$APP/PORT"
+
+      ;;
+
+    help)
+      cat && cat<<EOF
+      show-nginx-configuration <app>                  display the nginx configuration for an app
+EOF
+      ;;
+
+    *)
+
+      echo "Command $1 does not exist"
+
+      ;;
+
+  esac
+
+fi
