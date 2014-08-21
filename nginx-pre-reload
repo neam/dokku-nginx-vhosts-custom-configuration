@@ -22,5 +22,7 @@ if [ ! -d "$DOKKU_ROOT/$APP/nginx.conf.d/" ]; then
     mkdir "$DOKKU_ROOT/$APP/nginx.conf.d/"
 fi
 
-# import custom configuration to dokku host
+# import custom configuration to dokku host (allow failure since this script is also run on the config:set before the actual file is pushed)
+set +eo pipefail;
 docker run -i -e PORT=$(cat $DOKKU_ROOT/$APP/PORT) -e APP=$APP -a stdout -a stderr dokku/$APP source /app/.profile.d/app-env.sh && erb /app/"$NGINX_VHOSTS_CUSTOM_CONFIGURATION" > $DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf
+set -eo pipefail;
