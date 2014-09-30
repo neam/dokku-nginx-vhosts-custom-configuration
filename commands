@@ -56,7 +56,10 @@ if [[ $1 == nvcc ]] || [[ $1 == nvcc:* ]]; then
 
     help)
       cat && cat<<EOF
-      show-nginx-configuration <app>                  display the nginx configuration for an app
+      nvcc:nginx.conf                             <app>                  display the current nginx.conf
+      nvcc:nginx.conf.d                           <app>                  display the current nginx.conf.d/ directory contents
+      nvcc:nginx-vhosts-custom-configuration.conf <app>                  will display the current nginx.conf.d/nginx-vhosts-custom-configuration.conf contents
+      nvcc:port                                   <app>                  will display the current container port
 EOF
       ;;
 
