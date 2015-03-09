@@ -24,7 +24,7 @@ fi
 
 # import custom configuration to dokku host (allow failure since this script is also run on the config:set before the actual file is pushed)
 set +eo pipefail;
-id=$(docker run -d -e PORT=$(cat $DOKKU_ROOT/$APP/PORT) -e APP=$APP dokku/$APP /bin/bash -c "source /app/.profile.d/app-env.sh && erb /app/$NGINX_VHOSTS_CUSTOM_CONFIGURATION")
+id=$(docker run -d -e PORT=$(cat $DOKKU_ROOT/$APP/PORT) -e APP=$APP dokku/$APP /bin/bash -c "source /app/.profile.d/01-app-env.sh && erb /app/$NGINX_VHOSTS_CUSTOM_CONFIGURATION")
 test $(docker wait $id) -eq 0
 docker logs $id > $DOKKU_ROOT/$APP/nginx.conf.d/nginx-vhosts-custom-configuration.conf
 docker rm -f $id
